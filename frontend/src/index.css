@@ -1,0 +1,180 @@
+:root {
+  /* Base Dark Palette */
+  --bg-main: #0b0a10;
+  --bg-card: rgba(17, 16, 26, 0.65);
+  --bg-input: rgba(26, 24, 39, 0.85);
+  --text-primary: #f1eff5;
+  --text-secondary: #9c99a8;
+  --text-muted: #646170;
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-focus: rgba(255, 255, 255, 0.15);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+
+  /* Fonts */
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+  /* Default Mood: Neutral (Purple/Indigo) */
+  --mood-color: #8b5cf6;
+  --mood-color-rgb: 139, 92, 246;
+  --mood-glow: #6366f1;
+  --mood-gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --mood-gradient-radial: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.02) 70%);
+}
+
+/* Mood-specific overrides with smooth color changes */
+.mood-neutral {
+  --mood-color: #8b5cf6;
+  --mood-color-rgb: 139, 92, 246;
+  --mood-glow: #6366f1;
+  --mood-gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --mood-gradient-radial: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.02) 70%);
+}
+
+.mood-joy {
+  --mood-color: #f59e0b;
+  --mood-color-rgb: 245, 158, 11;
+  --mood-glow: #ec4899;
+  --mood-gradient: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+  --mood-gradient-radial: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, rgba(236, 72, 153, 0.02) 70%);
+}
+
+.mood-sadness {
+  --mood-color: #06b6d4;
+  --mood-color-rgb: 6, 182, 212;
+  --mood-glow: #3b82f6;
+  --mood-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  --mood-gradient-radial: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(59, 130, 246, 0.02) 70%);
+}
+
+.mood-anger {
+  --mood-color: #ef4444;
+  --mood-color-rgb: 239, 68, 68;
+  --mood-glow: #f97316;
+  --mood-gradient: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+  --mood-gradient-radial: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, rgba(249, 115, 22, 0.02) 70%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  height: 100svh;
+  max-height: 100vh;
+  max-height: 100svh;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background-color: var(--bg-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for sleek dark layout */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Animations */
+@keyframes ambient-pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes equalizer-bounce {
+
+  0%,
+  100% {
+    height: 3px;
+  }
+
+  50% {
+    height: 16px;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(var(--mood-color-rgb), 0.5);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(var(--mood-color-rgb), 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(var(--mood-color-rgb), 0);
+  }
+}
