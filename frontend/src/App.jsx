@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Loader from "./components/Loader";
 import "./App.css";
+import { chat } from "./services/api.js";
 import {
   SendIcon,
   MusicIcon,
@@ -121,9 +122,15 @@ function App() {
       const contextToSend = [...apiContext, text].slice(-3);
 
       // 3. Request analysis from Flask endpoint
-      const res = await axios.post("https://germproof-amiss-glimpse.ngrok-free.dev", {
+      const res = await axios.post("https://germproof-amiss-glimpse.ngrok-free.dev/chat", {
         context: contextToSend
-      });
+      },
+      {
+      headers: {
+        "ngrok-skip-browser-warning": "true"
+    }
+  }
+    );
 
       const detectedEmotion = res.data.emotion || "neutral";
       const botReply = res.data.response || "Here are some tunes matching your vibes.";
