@@ -121,7 +121,7 @@ function App() {
       const contextToSend = [...apiContext, text].slice(-3);
 
       // 3. Request analysis from Flask endpoint
-      const res = await axios.post("http://localhost:5000/chat", {
+      const res = await axios.post("https://germproof-amiss-glimpse.ngrok-free.dev", {
         context: contextToSend
       });
 
