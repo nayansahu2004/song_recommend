@@ -10,8 +10,14 @@ print("APP STARTED")
 app = Flask(__name__)
 CORS(
     app,
-    resources={r"/*": {"origins": "*"}}
-)
+    resources={   
+        r"/*": {
+            "origins": [
+                "https://songrecommend.vercel.app"
+            ]
+        }
+    }
+    )
 
 # Emotion → Music Tag Mapping
 EMOTION_TO_TAG = {
