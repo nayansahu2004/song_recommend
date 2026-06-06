@@ -8,7 +8,10 @@ from lastfm import get_songs
 print("APP STARTED")
 
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r"/*": {"origins": "*"}}
+)
 
 # Emotion → Music Tag Mapping
 EMOTION_TO_TAG = {
