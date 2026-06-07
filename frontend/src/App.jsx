@@ -1,72 +1,174 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Loader from "./components/Loader";
 import "./App.css";
-import { chat } from "./services/api.js";
-import {
-  SendIcon,
-  MusicIcon,
-  DiscIcon,
-  SmileIcon,
-  FrownIcon,
-  FlameIcon,
-  MehIcon,
-  HeadphonesIcon,
-  YoutubeIcon,
-  SpotifyIcon,
-  ExternalLinkIcon,
-  CopyIcon,
-  TrashIcon,
-  PlayIcon,
-  PauseIcon,
-  SparklesIcon
-} from "./components/Icons";
 
+// ─── ICONS ────────────────────────────────────────────────────────────────────
+const MusicIcon = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+  </svg>
+);
+
+const HeadphonesIcon = ({ size = 24, className = "", style = {} }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
+    <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+  </svg>
+);
+
+const DiscIcon = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2"/>
+    <path d="M12 2a10 10 0 0 0-7.74 16.39"/>
+    <path d="M12 2a10 10 0 0 1 7.74 16.39"/>
+  </svg>
+);
+
+const SendIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </svg>
+);
+
+const TrashIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v6"/><path d="M14 11v6"/>
+    <path d="M9 6V4h6v2"/>
+  </svg>
+);
+
+const PlayIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="5 3 19 12 5 21 5 3"/>
+  </svg>
+);
+
+const PauseIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+  </svg>
+);
+
+const YoutubeIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+  </svg>
+);
+
+const SpotifyIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M8 13.5a6 6 0 0 1 8 0"/>
+    <path d="M7 10.5a9 9 0 0 1 10 0"/>
+    <path d="M9 16.5a3 3 0 0 1 6 0"/>
+  </svg>
+);
+
+const SparklesIcon = ({ size = 24, style = {} }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </svg>
+);
+
+const SmileIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M8 13s1.5 2 4 2 4-2 4-2"/>
+    <line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+  </svg>
+);
+
+const FrownIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+    <line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+  </svg>
+);
+
+const FlameIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+  </svg>
+);
+
+const MehIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="8" y1="15" x2="16" y2="15"/>
+    <line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+  </svg>
+);
+
+// ─── LOADER COMPONENT ─────────────────────────────────────────────────────────
+function Loader() {
+  return (
+    <div className="loader-container">
+      <div className="loader-pulse">
+        <div className="loader-sparkle">
+          <SparklesIcon size={12} />
+        </div>
+      </div>
+      <div className="loader-text-wrapper">
+        <span>Tuning your vibe</span>
+        <div className="loader-dots">
+          <span>.</span><span>.</span><span>.</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── EMOTION HELPER ───────────────────────────────────────────────────────────
+function getEmotionDetails(emo) {
+  switch (emo) {
+    case "joy":     return { label: "Joyful",      icon: <SmileIcon size={18} />, emoji: "😊" };
+    case "sadness": return { label: "Melancholic",  icon: <FrownIcon size={18} />, emoji: "😢" };
+    case "anger":   return { label: "Fiery",        icon: <FlameIcon size={18} />, emoji: "🔥" };
+    default:        return { label: "Calm",         icon: <MehIcon   size={18} />, emoji: "😐" };
+  }
+}
+
+// ─── APP ──────────────────────────────────────────────────────────────────────
 function App() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([
     {
       sender: "bot",
       text: "Hello! I am Harmonix, your emotion-driven music companion. How are you feeling today? Talk to me about your mood, and I will recommend tracks matching your vibe.",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    }
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    },
   ]);
-  const [songs, setSongs] = useState([]);
-  const [emotion, setEmotion] = useState("neutral");
-  const [loading, setLoading] = useState(false);
-
-  // UX Enhancement States
+  const [songs, setSongs]         = useState([]);
+  const [emotion, setEmotion]     = useState("neutral");
+  const [loading, setLoading]     = useState(false);
   const [playingSong, setPlayingSong] = useState(null);
-  const [toast, setToast] = useState("");
+  const [toast, setToast]         = useState("");
 
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to bottom of chat
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // Auto-scroll
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatHistory, loading]);
 
-  // UX Feedback Toast Trigger
+  // Toast
   const triggerToast = (msg) => {
     setToast(msg);
-    const timer = setTimeout(() => {
-      setToast("");
-    }, 2500);
+    const timer = setTimeout(() => setToast(""), 2500);
     return () => clearTimeout(timer);
   };
 
-  // UX Reset Chat Action
+  // Reset
   const handleClearChat = () => {
     setChatHistory([
       {
         sender: "bot",
         text: "Hello! I am Harmonix, your emotion-driven music companion. How are you feeling today? Talk to me about your mood, and I will recommend tracks matching your vibe.",
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-      }
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
     ]);
     setSongs([]);
     setEmotion("neutral");
@@ -74,69 +176,40 @@ function App() {
     triggerToast("Conversation reset successfully!");
   };
 
-  // UX Copy to Clipboard helper
-  const handleCopyToClipboard = (text, type = "text") => {
-    navigator.clipboard.writeText(text).then(() => {
-      triggerToast(`Copied ${type} to clipboard!`);
-    }).catch(() => {
-      triggerToast("Failed to copy.");
-    });
-  };
-
-  // Map emotions to icons and visual labels
-  const getEmotionDetails = (emo) => {
-    switch (emo) {
-      case "joy":
-        return { label: "Joyful", icon: <SmileIcon size={18} />, emoji: "😊" };
-      case "sadness":
-        return { label: "Melancholic", icon: <FrownIcon size={18} />, emoji: "😢" };
-      case "anger":
-        return { label: "Fiery", icon: <FlameIcon size={18} />, emoji: "🔥" };
-      default:
-        return { label: "Calm", icon: <MehIcon size={18} />, emoji: "😐" };
-    }
-  };
-
+  // Send — preserves exact backend contract from original
   const handleSendMessage = async (textToSend) => {
     const text = textToSend || message;
     if (!text.trim() || loading) return;
 
-    // 1. Add User Message to UI State
     const userMsg = {
       sender: "user",
-      text: text,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      text,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
 
     setChatHistory((prev) => [...prev, userMsg]);
     setLoading(true);
-    setPlayingSong(null); // Pause current playing track while loading new ones
-    if (!textToSend) setMessage(""); // Clear input only if sent from input field
+    setPlayingSong(null);
+    if (!textToSend) setMessage("");
 
     try {
-      // 2. Build backend context array mapping
+      // Build context — same slice(-3) logic as original
       const apiContext = chatHistory.map((msg) =>
         msg.sender === "bot" ? `Bot: ${msg.text}` : msg.text
       );
-
       const contextToSend = [...apiContext, text].slice(-3);
 
-      // 3. Request analysis from Flask endpoint
-      const res = await axios.post("https://germproof-amiss-glimpse.ngrok-free.dev/chat", {
-        context: contextToSend
-      },
-      {
-      headers: {
-        "ngrok-skip-browser-warning": "true"
-    }
-  }
-    );
+      // Axios POST — identical to original payload & headers
+      const res = await axios.post(
+        "https://germproof-amiss-glimpse.ngrok-free.dev/chat",
+        { context: contextToSend },
+        { headers: { "ngrok-skip-browser-warning": "true" } }
+      );
 
-      const detectedEmotion = res.data.emotion || "neutral";
-      const botReply = res.data.response || "Here are some tunes matching your vibes.";
-      const recommendedSongs = res.data.songs || [];
+      const detectedEmotion  = res.data.emotion  || "neutral";
+      const botReply         = res.data.response || "Here are some tunes matching your vibes.";
+      const recommendedSongs = res.data.songs    || [];
 
-      // 4. Update state with results
       setEmotion(detectedEmotion);
       setSongs(recommendedSongs);
       setChatHistory((prev) => [
@@ -144,24 +217,23 @@ function App() {
         {
           sender: "bot",
           text: botReply,
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-        }
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
       ]);
 
-      // UX autoplay first recommended song
       if (recommendedSongs.length > 0) {
         setPlayingSong(0);
         triggerToast("Now playing recommended track 🎵");
       }
     } catch (err) {
-      console.error("Connection error to Flask backend: ", err);
+      console.error("Connection error to Flask backend:", err);
       setChatHistory((prev) => [
         ...prev,
         {
           sender: "bot",
           text: "Oops! I encountered an issue connecting to my music database. Please ensure the backend server is running.",
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-        }
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
       ]);
     } finally {
       setLoading(false);
@@ -169,27 +241,26 @@ function App() {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSendMessage();
-    }
+    if (e.key === "Enter") handleSendMessage();
   };
 
   const starterPrompts = [
-    { label: "Feeling Great", text: "I'm having an amazing day and feeling super happy!", emoji: "😊" },
-    { label: "A bit down", text: "Feeling a bit sad and lonely today, looking for comfort.", emoji: "😢" },
-    { label: "Stressed out", text: "I'm feeling stressed, overwhelmed, and frustrated.", emoji: "🔥" },
-    { label: "Just relaxed", text: "Feeling peaceful, quiet, and relaxed.", emoji: "🧘" }
+    { label: "Feeling Great", text: "I'm having an amazing day and feeling super happy!",      emoji: "😊" },
+    { label: "A bit down",    text: "Feeling a bit sad and lonely today, looking for comfort.", emoji: "😢" },
+    { label: "Stressed out",  text: "I'm feeling stressed, overwhelmed, and frustrated.",       emoji: "🔥" },
+    { label: "Just relaxed",  text: "Feeling peaceful, quiet, and relaxed.",                   emoji: "🧘" },
   ];
 
   const emotionDetails = getEmotionDetails(emotion);
 
   return (
     <div className={`app-container mood-${emotion}`}>
-      {/* Background Glowing Blobs */}
-      <div className="ambient-glow glow-1"></div>
-      <div className="ambient-glow glow-2"></div>
 
-      {/* Main App Header */}
+      {/* Background ambient glows */}
+      <div className="ambient-glow glow-1" />
+      <div className="ambient-glow glow-2" />
+
+      {/* ── HEADER ── */}
       <header className="app-header">
         <div className="logo-section">
           <MusicIcon size={28} className="logo-icon" />
@@ -201,8 +272,8 @@ function App() {
 
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <button
-            onClick={handleClearChat}
             className="clear-btn"
+            onClick={handleClearChat}
             title="Reset conversation"
             aria-label="Reset Chat"
           >
@@ -210,8 +281,8 @@ function App() {
             <span>Reset Vibe</span>
           </button>
 
-          <div className="vibe-status" id="vibe-badge">
-            <div className="status-dot"></div>
+          <div className="vibe-status">
+            <div className="status-dot" />
             <span className="status-label">Vibe:</span>
             <span className="status-value">
               {emotionDetails.emoji} {emotionDetails.label}
@@ -220,9 +291,10 @@ function App() {
         </div>
       </header>
 
-      {/* App Content Grid */}
+      {/* ── MAIN GRID ── */}
       <main className="app-grid">
-        {/* Left column: Chat Panel */}
+
+        {/* ── LEFT: Chat Panel ── */}
         <section className="chat-panel" aria-label="Conversation Thread">
           <div className="chat-messages">
             {chatHistory.map((msg, i) => (
@@ -231,24 +303,12 @@ function App() {
                   {msg.sender === "bot" ? (
                     <HeadphonesIcon size={18} />
                   ) : (
-                    <span style={{ fontSize: "0.85rem", fontWeight: "700" }}>ME</span>
+                    <span style={{ fontSize: "0.75rem", fontWeight: "700" }}>ME</span>
                   )}
                 </div>
-                <div className="message-content" style={{ position: "relative" }}>
+                <div className="message-content">
                   <div className="message-bubble">
                     <p>{msg.text}</p>
-
-                    {/* Copy action on hover */}
-                    <div className="message-actions">
-                      <button
-                        onClick={() => handleCopyToClipboard(msg.text, "message")}
-                        className="msg-action-btn"
-                        title="Copy message to clipboard"
-                        aria-label="Copy message text"
-                      >
-                        <CopyIcon size={12} />
-                      </button>
-                    </div>
                   </div>
                   <span className="message-time">{msg.timestamp}</span>
                 </div>
@@ -260,7 +320,7 @@ function App() {
           </div>
 
           <div className="chat-footer">
-            {/* Quick Mood Starter Chips */}
+            {/* Quick mood starters */}
             <div className="mood-starters" aria-label="Quick Mood Selectors">
               {starterPrompts.map((starter, index) => (
                 <button
@@ -275,7 +335,7 @@ function App() {
               ))}
             </div>
 
-            {/* Input Row */}
+            {/* Message input */}
             <div className="input-wrapper">
               <input
                 value={message}
@@ -299,19 +359,20 @@ function App() {
           </div>
         </section>
 
-        {/* Right column: Music sidebar */}
+        {/* ── RIGHT: Sidebar ── */}
         <section className="sidebar-panel" aria-label="Music Recommendations">
-          {/* Turntable widget */}
+
+          {/* Turntable visualizer */}
           <div className="vibe-visualizer">
-            <div className="vinyl-turntable">
+            <div className={`vinyl-turntable ${playingSong !== null && !loading ? "playing" : ""}`}>
               <div className={`vinyl-disc ${playingSong !== null && !loading ? "spinning" : ""}`}>
                 <div className="vinyl-label">
-                  <DiscIcon size={24} className="vinyl-center-icon" />
+                  <DiscIcon size={24} />
                 </div>
               </div>
               <div className="vinyl-arm">
-                <div className="vinyl-arm-body"></div>
-                <div className="vinyl-arm-head"></div>
+                <div className="vinyl-arm-body" />
+                <div className="vinyl-arm-head" />
               </div>
             </div>
 
@@ -320,7 +381,7 @@ function App() {
               <span>{emotionDetails.label} Vibe</span>
             </div>
 
-            {/* Realtime Music Player Display */}
+            {/* Now playing bar */}
             {playingSong !== null && songs[playingSong] && (
               <div className="playing-info-box">
                 <div className="playing-info-icon-wrapper">
@@ -331,16 +392,17 @@ function App() {
                   <div className="playing-info-title">{songs[playingSong].name}</div>
                   <div className="playing-info-artist">{songs[playingSong].artist}</div>
                 </div>
-                <div className="equalizer" style={{ position: "relative", bottom: "auto", right: "auto", display: "flex" }}>
-                  <span className="eq-bar" style={{ backgroundColor: "var(--mood-color)" }}></span>
-                  <span className="eq-bar" style={{ backgroundColor: "var(--mood-color)", animationDelay: "0.2s" }}></span>
-                  <span className="eq-bar" style={{ backgroundColor: "var(--mood-color)", animationDelay: "0.4s" }}></span>
+                <div className="eq-bars-wrapper">
+                  <span className="np-eq-bar" />
+                  <span className="np-eq-bar" />
+                  <span className="np-eq-bar" />
+                  <span className="np-eq-bar" />
                 </div>
               </div>
             )}
           </div>
 
-          {/* Recommended Songs Container */}
+          {/* Song recommendations */}
           <div className="recommendations-section">
             <h2 className="section-title">
               <MusicIcon size={18} className="section-icon" />
@@ -349,22 +411,16 @@ function App() {
 
             <div className="songs-list">
               {loading ? (
-                /* UX Skeleton Loader state */
                 <>
-                  <div className="song-card-skeleton">
-                    <div className="song-art-skeleton"></div>
-                    <div className="song-details-skeleton">
-                      <div className="song-title-skeleton"></div>
-                      <div className="song-artist-skeleton"></div>
+                  {[0, 1, 2].map((n) => (
+                    <div key={n} className="song-card-skeleton" style={{ animationDelay: `${n * 0.12}s` }}>
+                      <div className="song-art-skeleton" />
+                      <div className="song-details-skeleton">
+                        <div className="song-title-skeleton" />
+                        <div className="song-artist-skeleton" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="song-card-skeleton" style={{ animationDelay: "0.15s" }}>
-                    <div className="song-art-skeleton"></div>
-                    <div className="song-details-skeleton">
-                      <div className="song-title-skeleton"></div>
-                      <div className="song-artist-skeleton"></div>
-                    </div>
-                  </div>
+                  ))}
                 </>
               ) : songs.length > 0 ? (
                 songs.map((song, index) => (
@@ -378,9 +434,9 @@ function App() {
                       <HeadphonesIcon size={20} />
                       {playingSong === index && (
                         <div className="equalizer">
-                          <span className="eq-bar"></span>
-                          <span className="eq-bar"></span>
-                          <span className="eq-bar"></span>
+                          <span className="eq-bar" />
+                          <span className="eq-bar" />
+                          <span className="eq-bar" />
                         </div>
                       )}
                     </div>
@@ -390,21 +446,17 @@ function App() {
                     </div>
 
                     <div className="song-actions" onClick={(e) => e.stopPropagation()}>
-                      {/* Play/Pause control button */}
                       <button
                         className="song-play-btn"
                         onClick={() => setPlayingSong(playingSong === index ? null : index)}
-                        title={playingSong === index ? "Pause" : "Play preview"}
+                        title={playingSong === index ? "Pause" : "Play"}
                         aria-label={playingSong === index ? "Pause track" : "Play track"}
                       >
                         {playingSong === index ? <PauseIcon size={10} /> : <PlayIcon size={10} />}
                       </button>
 
-                      {/* Music platform external links */}
                       <a
-                        href={`https://open.spotify.com/search/${encodeURIComponent(
-                          song.name + " " + song.artist
-                        )}`}
+                        href={`https://open.spotify.com/search/${encodeURIComponent(song.name + " " + song.artist)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="action-link spotify"
@@ -413,10 +465,9 @@ function App() {
                       >
                         <SpotifyIcon size={14} />
                       </a>
+
                       <a
-                        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-                          song.name + " " + song.artist
-                        )}`}
+                        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(song.name + " " + song.artist)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="action-link youtube"
@@ -442,7 +493,7 @@ function App() {
         </section>
       </main>
 
-      {/* Floating Toast Notification Box */}
+      {/* Toast notification */}
       {toast && (
         <div className="toast-notification">
           <SparklesIcon size={16} style={{ color: "var(--mood-color)", transition: "color 0.6s ease" }} />
